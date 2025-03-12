@@ -11,3 +11,9 @@ class TestBooksCollector:
         for book_name in name:
             book.add_new_book(book_name)
         assert len(book.get_books_genre()) == books_count
+
+    def test_set_book_genre_set_genre_to_new_book(self, book):
+        book.add_new_book('Сияние')
+        book.set_book_genre('Сияние', 'Ужасы')
+        assert book.get_book_genre('Сияние') == 'Ужасы'
+
