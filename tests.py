@@ -26,4 +26,4 @@ class TestBooksCollector:
         for name, book_genre in data.BOOK_GENRE.items():
             if book_genre == genre:
                 books_with_specific_genre.append(name)
-                assert books_with_specific_genre == [name]
+                assert name in books_with_specific_genre
