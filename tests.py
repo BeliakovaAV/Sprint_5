@@ -37,3 +37,10 @@ class TestBooksCollector:
                     books_with_specific_genre.append(name)
             assert name not in books_with_specific_genre
 
+    def test_get_books_for_children(self, book):
+        books_for_children = []
+        for name, genre in data.BOOK_GENRE.items():
+            if genre not in book.genre_age_rating and genre in book.genre:
+                books_for_children.append(name)
+                assert name in books_for_children
+
