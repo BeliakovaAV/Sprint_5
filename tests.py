@@ -66,3 +66,5 @@ class TestBooksCollector:
         favorites = book.get_list_of_favorites_books()
         assert len(favorites) == 0
 
+
+
