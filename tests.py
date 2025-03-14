@@ -37,10 +37,21 @@ class TestBooksCollector:
                     books_with_specific_genre.append(name)
             assert name not in books_with_specific_genre
 
-    def test_get_books_for_children(self, book):
+    def test_get_books_for_children_positive_and_negative(self, book):
         books_for_children = []
         for name, genre in data.BOOK_GENRE.items():
             if genre not in book.genre_age_rating and genre in book.genre:
                 books_for_children.append(name)
                 assert name in books_for_children
 
+    @pytest.mark.parametrize('name, books_count', [(['Сияние'], 1), (['Сияние', 'Доктор Айболит'], 2), ([], 0)])
+    def test_add_book_in_favorites_add_one_two_zero_books(self, book, name, books_count):
+        for book_name in name:
+            if book_name in data.BOOK_GENRE.items():
+                book.favorites.append(book_name)
+                assert len(book.get_list_of_favorites_books) == books_count and book_name in book.get_list_of_favorite_books
+
+    def test_add_book_in_favorites_if_book_already_in_favorites(self, book, book_with_1_favorite_book):
+        book_with_1_favorite_book.add_book_in_favorites('Сияние')
+        favorites = book.get_list_of_favorites_books()
+        assert len(favorites) == 1
