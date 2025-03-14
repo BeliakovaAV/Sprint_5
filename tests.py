@@ -13,6 +13,11 @@ class TestBooksCollector:
             book.add_new_book(book_name)
         assert len(book.get_books_genre()) == books_count
 
+    def test_add_new_book_add_already_added_book(self, book, book_with_1_book_in_books_genre):
+        book_with_1_book_in_books_genre.add_new_book('Сияние')
+        new_books = book.get_books_genre()
+        assert len(new_books) == 1
+
     def test_set_book_genre_set_genre_to_new_book(self, book):
         book_name = helpers.generate_random_book()
         book_genre = helpers.generate_random_genre()
@@ -35,7 +40,7 @@ class TestBooksCollector:
             for name, book_genre in data.BOOK_GENRE.items():
                 if book_genre == genre:
                     books_with_specific_genre.append(name)
-            assert name not in books_with_specific_genre
+                assert name not in books_with_specific_genre
 
     def test_get_books_for_children_positive_and_negative(self, book):
         books_for_children = []
@@ -60,3 +65,4 @@ class TestBooksCollector:
         book_with_1_favorite_book.favorites.remove('Сияние')
         favorites = book.get_list_of_favorites_books()
         assert len(favorites) == 0
+
