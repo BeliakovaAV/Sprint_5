@@ -1,24 +1,70 @@
+import pytest
+
+import data
+import helpers
 from main import BooksCollector
 
-# класс TestBooksCollector объединяет набор тестов, которыми мы покрываем наше приложение BooksCollector
-# обязательно указывать префикс Test
+
 class TestBooksCollector:
 
-    # пример теста:
-    # обязательно указывать префикс test_
-    # дальше идет название метода, который тестируем add_new_book_
-    # затем, что тестируем add_two_books - добавление двух книг
-    def test_add_new_book_add_two_books(self):
-        # создаем экземпляр (объект) класса BooksCollector
-        collector = BooksCollector()
+    @pytest.mark.parametrize('name, books_count', [(['Сияние'], 1), (['Сияние', 'Доктор Айболит'], 2), ([], 0)])
+    def test_add_new_book_add_one_two_zero_books(self, book, name, books_count):
+        for book_name in name:
+            book.add_new_book(book_name)
+        assert len(book.get_books_genre()) == books_count
 
-        # добавляем две книги
-        collector.add_new_book('Гордость и предубеждение и зомби')
-        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+    def test_add_new_book_add_already_added_book(self, book, book_with_1_book_in_books_genre):
+        book_with_1_book_in_books_genre.add_new_book('Сияние')
+        new_books = book.get_books_genre()
+        assert len(new_books) == 1
 
-        # проверяем, что добавилось именно две
-        # словарь books_rating, который нам возвращает метод get_books_rating, имеет длину 2
-        assert len(collector.get_books_rating()) == 2
+    def test_set_book_genre_set_genre_to_new_book(self, book):
+        book_name = helpers.generate_random_book()
+        book_genre = helpers.generate_random_genre()
+        book.add_new_book(book_name)
+        book.set_book_genre(book_name, book_genre)
+        assert book.get_book_genre(book_name) == book_genre
 
-    # напиши свои тесты ниже
-    # чтобы тесты были независимыми в каждом из них создавай отдельный экземпляр класса BooksCollector()
+    @pytest.mark.parametrize('genre', ['Фантастика', 'Ужасы', 'Детективы', 'Мультфильмы', 'Комедии'])
+    def test_get_books_with_specific_genre_positive(self, book, genre):
+        books_with_specific_genre = []
+        for name, book_genre in data.BOOK_GENRE.items():
+            if book_genre == genre:
+                books_with_specific_genre.append(name)
+                assert name in books_with_specific_genre
+
+    @pytest.mark.parametrize('genre', ['', 'Фэнтези', 468])
+    def test_get_books_with_specific_genre_negative(self, book, genre):
+        books_with_specific_genre = []
+        if data.BOOK_GENRE and genre in book.genre:
+            for name, book_genre in data.BOOK_GENRE.items():
+                if book_genre == genre:
+                    books_with_specific_genre.append(name)
+                assert name not in books_with_specific_genre
+
+    def test_get_books_for_children_positive_and_negative(self, book):
+        books_for_children = []
+        for name, genre in data.BOOK_GENRE.items():
+            if genre not in book.genre_age_rating and genre in book.genre:
+                books_for_children.append(name)
+                assert name in books_for_children
+
+    @pytest.mark.parametrize('name, books_count', [(['Сияние'], 1), (['Сияние', 'Доктор Айболит'], 2), ([], 0)])
+    def test_add_book_in_favorites_add_one_two_zero_books(self, book, name, books_count):
+        for book_name in name:
+            if book_name in data.BOOK_GENRE.items():
+                book.favorites.append(book_name)
+                assert len(book.get_list_of_favorites_books) == books_count and book_name in book.get_list_of_favorite_books
+
+    def test_add_book_in_favorites_if_book_already_in_favorites(self, book, book_with_1_favorite_book):
+        book_with_1_favorite_book.add_book_in_favorites('Сияние')
+        favorites = book.get_list_of_favorites_books()
+        assert len(favorites) == 1
+
+    def test_delete_book_from_favorites(self, book, book_with_1_favorite_book):
+        book_with_1_favorite_book.favorites.remove('Сияние')
+        favorites = book.get_list_of_favorites_books()
+        assert len(favorites) == 0
+
+
+
