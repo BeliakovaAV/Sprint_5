@@ -13,8 +13,9 @@ class TestBooksCollector:
             book.add_new_book(book_name)
         assert len(book.get_books_genre()) == books_count
 
-    def test_add_new_book_add_already_added_book(self, book, book_with_1_book_in_books_genre):
-        book_with_1_book_in_books_genre.add_new_book('Сияние')
+    def test_add_new_book_add_already_added_book(self, book):
+        book.add_new_book('Сияние')
+        book.add_new_book('Сияние')
         new_books = book.get_books_genre()
         assert len(new_books) == 1
 
