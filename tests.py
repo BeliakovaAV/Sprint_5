@@ -78,3 +78,7 @@ class TestBooksCollector:
         books_list = book.get_books_genre()
         assert books_list == data.BOOK_GENRE
 
+    def test_get_books_genre_empty(self, book):
+        book.books_genre = {}
+        books_list = book.get_books_genre()
+        assert books_list == {}
