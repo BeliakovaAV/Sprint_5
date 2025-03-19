@@ -28,11 +28,11 @@ class TestBooksCollector:
 
     @pytest.mark.parametrize('genre', ['Фантастика', 'Ужасы', 'Детективы', 'Мультфильмы', 'Комедии'])
     def test_get_books_with_specific_genre_positive(self, book, genre):
-        books_with_specific_genre = []
-        for name, book_genre in data.BOOK_GENRE.items():
-            if book_genre == genre:
-                books_with_specific_genre.append(name)
+        book.books_genre = data.BOOK_GENRE
+        books_with_specific_genre = book.get_books_with_specific_genre(genre)
         assert len(books_with_specific_genre) > 0
+        for name in books_with_specific_genre:
+            assert book.books_genre[name] == genre
 
     @pytest.mark.parametrize('genre', ['', 'Фэнтези', 468])
     def test_get_books_with_specific_genre_negative(self, book, genre):
