@@ -59,8 +59,8 @@ class TestBooksCollector:
         favorites = book.get_list_of_favorites_books()
         assert len(favorites) == 1
 
-    def test_delete_book_from_favorites(self, book, book_with_1_favorite_book):
-        book_with_1_favorite_book.favorites.remove('Сияние')
+    def test_delete_book_from_favorites_with_one_book_in_favorites(self, book, book_with_1_favorite_book):
+        book_with_1_favorite_book.delete_book_from_favorites('Сияние')
         favorites = book.get_list_of_favorites_books()
         assert len(favorites) == 0
 
