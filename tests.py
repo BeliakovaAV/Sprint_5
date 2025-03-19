@@ -67,5 +67,8 @@ class TestBooksCollector:
         favorites = book.get_list_of_favorites_books()
         assert len(favorites) == 0
 
-
-
+    @pytest.mark.parametrize('name, actual_genre', [('Сияние', 'Ужасы'), ('Доктор Айболит', 'Мультфильмы'), ('Калоша', 'Комедии')])
+    def test_get_book_genre_book_in_books_genre_dict(self, book, name, actual_genre):
+        book.books_genre = data.BOOK_GENRE
+        genre = book.get_book_genre(name)
+        assert genre == actual_genre
