@@ -49,13 +49,10 @@ class TestBooksCollector:
 
     @pytest.mark.parametrize('name, books_count', [(['Сияние'], 1), (['Сияние', 'Доктор Айболит'], 2), ([], 0)])
     def test_add_book_in_favorites_add_one_two_zero_books(self, book, name, books_count):
+        book.books_genre = data.BOOK_GENRE
         for book_name in name:
-            if book_name in data.BOOK_GENRE:
-                book.favorites.append(book_name)
+            book.add_book_in_favorites(book_name)
         assert len(book.get_list_of_favorites_books()) == books_count
-        for book_name in name:
-            if book_name in data.BOOK_GENRE:
-                assert book_name in book.get_list_of_favorites_books()
 
     def test_add_book_in_favorites_if_book_already_in_favorites(self, book, book_with_1_favorite_book):
         book_with_1_favorite_book.add_book_in_favorites('Сияние')
